@@ -1,0 +1,65 @@
+## DEFINITION OF MODULE. ##
+
+A Module is definned by annotating a class with the @Module decorator
+The decorator provides metadata that Nest uses to organize the application structure.
+MODULE DECORATOR PROPERTIES:
+- providers: Array of providers to be available within the module via dependency injection.
+- controllers: Array of controllers to be instantiated with the module
+- exports: Array of providers to export to other modules
+- imports: List of modules required by this module. Any exported provider by these modules will now be available in our module via dependency injection.
+CREATE A MODULE BY INTEGRATED TERMINAL
+** nest g module nameOfModule **
+nest for nestjs cli, g for generate, module for schematic to create and nameOfModule that I want to created. Nest creates a new subfolder and edit the src/app.module.ts
+
+// ------------------------------------------------- // 
+
+## NestJS CONTROLLERS  ##
+Definition: Controllers are defined by decoration a class the @Controller decorator.
+The decorator accepts a string, which is the path to be handled by the controller.
+- Controllers are the responsibles for handling incoming requests and returning responses to the client.
+- Are bound to a specific path (for ex: '/tasks', for the resourse.)
+- Contains handlers, which handle endpoints and request methods (GET, POST, DELETE, etc).
+- Can take advantage of dependency injection to consume providers within the same module.
+
+CREATE A CONTROLLER WITH NEST CLI
+nest g controller tasks (path of the controller ) --no-spec (no test unit for now)
+New file has been created and updated scr/task/task.module.ts
+
+
+// -------------------------------------------- //
+## HANDLER ##
+Definition: Handler are a simply methods within the controller class, decorated with decorators such as @Get, @Post, etc.. 
+
+FLOW:
+When a HTTP request incomming to our app:
+-> The request are routed to Controller 
+-> the handler is called with arguments: NestJS parse the relevant request data and it will be available in the handler.
+-> Handler handles the request: perform operations such as communication with a service. For example: retrieving an item from the database.
+-> Handle returns response value: Response can be of any type and even an exception. Nest will wrap the returned value as an HTTP response and return it to the client.
+
+// -----------------------------------------------------//
+## NESTJS PROVIDERS ##
+Can be injected into constructors if decorated as an @Injectable, dependency injection.
+Can be a plain value, a class, sync/async factory, etc.
+Providers must be provided to a module for them to be usable.
+Can be exported from a module - and then be available to other modules that import it.
+WHAT IS A SERVICE?
+Define as providers. NOT ALL PROVIDERS ARE SERVICES.
+Common concept within software develompment and are not exclusive NestJS, JavaScript or back-end develompment.
+Singleton when wrapped with @Injectable() and provided to a module. That means, the same instance will be shared across the app. acting as a single source of truth. 
+The main source of business logic. For example, a service will be called from a controller to validate data, create an item in the database and return a response. 
+
+## DEPENDENCY INJECTION IN NESTJS ##
+Any component within the NestJS ecosystem can injected a provider that is decorated with the @Injectable.
+We define the dependencies in the constructor of the class. NestJS will take care of the injection for us, and it will then be available as a class property.
+CREATE A SERVICE:
+nest g service tasks --no-spec
+
+//---------------------------------------------------------//
+
+## DIFERENCES BETWEEN INTERFACES // MODELS ## 
+- Interfaces are a TS concept that simply enforces the shape of an object upon compilation, therefore after compilation interfaces are not preserved as a interfaces anymore. 
+- Classes however already exist in JavaScript since ECMA6, therefore even both compilation our classes will be preserved. Classes are usefull when you want to create objects based on blueprint and add some self-contained functionality to them, using methods for example. Convert from Interface to class it's quite easy to do. 
+
+
+48:48 feature creating a task
