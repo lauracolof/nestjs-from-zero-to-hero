@@ -10,5 +10,3 @@ export enum TaskStatus {
   IN_PROGRESS = 'IN_PROGRESS',
   DONE = 'DONE',
 }
-
-41.49;

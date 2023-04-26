@@ -61,5 +61,36 @@ nest g service tasks --no-spec
 - Interfaces are a TS concept that simply enforces the shape of an object upon compilation, therefore after compilation interfaces are not preserved as a interfaces anymore. 
 - Classes however already exist in JavaScript since ECMA6, therefore even both compilation our classes will be preserved. Classes are usefull when you want to create objects based on blueprint and add some self-contained functionality to them, using methods for example. Convert from Interface to class it's quite easy to do. 
 
+// ----------------------------------------------------- //
 
-48:48 feature creating a task
+# Data Transfer object (DTO)
+``A data transfer objetc is an object that defines how the data will be sent over the network.``
+* Common concept in software develompment that is not specific to NestJS
+* Result in more bulletproof code, as it can be used as a TypeScript type.
+* Do not have any behavior except for storage, retrieval, serialization and deserialization of its own data.
+* Results increased performance (although negligible in small applications).
+* Can be usedful for data validation.
+* A DTO is NOT a model definition. It defines the shape of data a specific case, for example - creating a task. 
+* Can be defined using an interface or a class.
+CLASS VS INTERFACE FOR DTOS.
+The recommended approach is to use classes, also clearly documented in the NestJS documentation. The reason is that interfaces are a part of TypeScript and therefore are not preserved post-compilation. Classes allow us to do more, and since they are a part of JavaScript, they will be preserved post-compilation.
+NestJS cannot refer to interfaces in run-time, but can refer to classes.
+CLASSES ARE THE WAY TO GO FOR DTO'S
+
+
+
+
+
+## FIRST WAY ##
+It's important to understand the problem that leads us to using DTOS, for example: 
+- The client send an HTTP POST request to /tasks to creating one that's contain the title and the description.
+- The req body is then passed on to the route Handler in the controller where the body parameters are explicity picked by using the body decorator (the title and the description)
+- Then the task service create task method is called with the title and the description as arguments. Where the create task method then picks these arguments, creates de tasks, pushes it to the array and then return the task back to the controller in the form of a task which is the model that we've created.
+- The controller then send an HTTP response back to the client containing the task object.
+HOW MANY TIMES WE REFER TO THE PROPERTIES OF A TASK WITHIN OUR CODE. Both in the controller and in the service, just in order to retrieve the title and the description.
+Imagine a situation where we have to the make changes to this shake of data, maybe at some point we need to change the types of those parameters maybe we need to introduce a new value, or remove a value. To apply such change you have to change the parameters we extracted in the Handler Definition in our controller, we'll also have to change the code where we call task service create task in the controller handler, and also have to change the create task definition in the service to support the new parameters. 
+WE DO NOT HAVE A UNIFIED WAY TO DEFINE WHAT THE DATA LOOKS LIKE THROUGHOUT THE PROCESS.
+
+
+
+1.00hs
