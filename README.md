@@ -28,3 +28,5 @@
 NestJS is a powerful and scalable Node.js framework that leverages the best of TypeScript to create a robust and maintainable codebase. This course will cover everything from the basics of NestJS, to advanced topics such as building microservices, creating GraphQL APIs, and implementing authentication and authorization.
 
 Throughout the course, you will learn how to use NestJS to build real-world applications, from simple CRUD APIs to complex multi-service architectures. You will also learn how to work with popular libraries and tools such as TypeORM, Swagger, and Docker.
+
+By the end of the course, you will have a solid understanding of NestJS and how to use it to build modern, scalable, and maintainable back-end applications. You will also have a portfolio of projects to showcase your skills to potential employers.
