@@ -1,6 +1,6 @@
-### NOTES
+# NOTES
 
-## DEFINITION OF MODULE.
+### Definition of module.
 
 A Module is definned by annotating a class with the @Module decorator
 The decorator provides metadata that Nest uses to organize the application structure.
@@ -11,12 +11,10 @@ MODULE DECORATOR PROPERTIES:
 - exports: Array of providers to export to other modules
 - imports: List of modules required by this module. Any exported provider by these modules will now be available in our module via dependency injection.
   CREATE A MODULE BY INTEGRATED TERMINAL
-  ** nest g module nameOfModule **
+  `nest g module nameOfModule`
   nest for nestjs cli, g for generate, module for schematic to create and nameOfModule that I want to created. Nest creates a new subfolder and edit the src/app.module.ts
 
-// ------------------------------------------------- //
-
-## NestJS CONTROLLERS
+### NestJS Controllers
 
 Definition: Controllers are defined by decoration a class the @Controller decorator.
 The decorator accepts a string, which is the path to be handled by the controller.
@@ -27,12 +25,13 @@ The decorator accepts a string, which is the path to be handled by the controlle
 - Can take advantage of dependency injection to consume providers within the same module.
 
 CREATE A CONTROLLER WITH NEST CLI
-nest g controller tasks (path of the controller ) --no-spec (no test unit for now)
+
+`nest g controller tasks`
+
+(path of the controller ) --no-spec (no test unit for now)
 New file has been created and updated scr/task/task.module.ts
 
-// -------------------------------------------- //
-
-## HANDLER
+### Handlers
 
 Definition: Handler are a simply methods within the controller class, decorated with decorators such as @Get, @Post, etc..
 
@@ -43,9 +42,7 @@ When a HTTP request incomming to our app:
 -> Handler handles the request: perform operations such as communication with a service. For example: retrieving an item from the database.
 -> Handle returns response value: Response can be of any type and even an exception. Nest will wrap the returned value as an HTTP response and return it to the client.
 
-// -----------------------------------------------------//
-
-## NESTJS PROVIDERS
+### Providers
 
 Can be injected into constructors if decorated as an @Injectable, dependency injection.
 Can be a plain value, a class, sync/async factory, etc.
@@ -57,23 +54,19 @@ Common concept within software develompment and are not exclusive NestJS, JavaSc
 Singleton when wrapped with @Injectable() and provided to a module. That means, the same instance will be shared across the app. acting as a single source of truth.
 The main source of business logic. For example, a service will be called from a controller to validate data, create an item in the database and return a response.
 
-## DEPENDENCY INJECTION IN NESTJS
+### Dependency injection in NestJS
 
 Any component within the NestJS ecosystem can injected a provider that is decorated with the @Injectable.
 We define the dependencies in the constructor of the class. NestJS will take care of the injection for us, and it will then be available as a class property.
 CREATE A SERVICE:
 nest g service tasks --no-spec
 
-//---------------------------------------------------------//
-
-## DIFERENCES BETWEEN INTERFACES // MODELS
+### Difference between Interfaces & Models
 
 - Interfaces are a TS concept that simply enforces the shape of an object upon compilation, therefore after compilation interfaces are not preserved as a interfaces anymore.
 - Classes however already exist in JavaScript since ECMA6, therefore even both compilation our classes will be preserved. Classes are usefull when you want to create objects based on blueprint and add some self-contained functionality to them, using methods for example. Convert from Interface to class it's quite easy to do.
 
-// ----------------------------------------------------- //
-
-## Data Transfer object (DTO)
+### Data Transfer object (DTO)
 
 `A data transfer objetc is an object that defines how the data will be sent over the network.`
 
@@ -88,13 +81,13 @@ nest g service tasks --no-spec
   The recommended approach is to use classes, also clearly documented in the NestJS documentation. The reason is that interfaces are a part of TypeScript and therefore are not preserved post-compilation. Classes allow us to do more, and since they are a part of JavaScript, they will be preserved post-compilation.
   NestJS cannot refer to interfaces in run-time, but can refer to classes.
   CLASSES ARE THE WAY TO GO FOR DTO'S
-  -----> IMPORTANT
+  ** IMPORTANT **
   Data Transfer object are NOT mandatory.
   You can still develomp applications without using DTOs.
   However, the value they add makes it worthwhile to use them when applicable.
   Applying the DTO pattern as soon as possible will make it easy for you to mantein and refactor your code.
 
-# FIRST WAY CREATING A TASK
+### First way to create a task
 
 It's important to understand the problem that leads us to using DTOS, for example:
 
@@ -119,7 +112,7 @@ It's important to understand the problem that leads us to using DTOS, for exampl
   }
 ```
 
-## SECOND WAY CREATING A TASK##
+### Second way to create a task
 
 We can create a DTO for the create task operation and applied to the controller and the service this will make it easier for us to maintain the shape of this data that is circulated across the app and introduce new changes to this sort of data.
 
@@ -129,5 +122,20 @@ We can create a DTO for the create task operation and applied to the controller 
     return this.tasksService.createTask(createTaskDto);
   }
 ```
+
+### Update a task
+
+- Incoming PATCH HTTP request
+- The URL will contain the ID of the task to be deleted
+- The request body will contain the new status
+- Handle the req - extract the ID and the status and update the task's status.
+- Return the task back to the client.
+  Patch best practices
+- Refer to the resource in the URL;
+- Refer to a specific item by ID
+- Specific the what has to be patched in the URL, in this case the status;
+- Provide the required parameters in the request body
+  `*PATCH:* http://locaholost:3000/tasks/25d6ee00-e4f0-11ed-ae23-056ba5723150/status`
+  `{ "status": "IN_PROGRESS" }`
 
 \* TODO:
