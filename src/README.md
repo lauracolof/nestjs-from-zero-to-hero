@@ -178,7 +178,7 @@ createTask(
 
 Or then there are parameters level types, which are defined at the parameter level, only that specific parameter for which the pipe has been specified will be process:
 
-````
+```
 @Post()
 createTask(
   @Body('description', SomePipe) description
@@ -186,6 +186,7 @@ createTask(
   //...
 }
 ```
+
 And finally there are Global pipes, this are defined at the application level and to will be applied to any incoming request within the app.
 
 ```
@@ -199,16 +200,51 @@ bootstrap();
 
 **Parameter-level VS Handler-level pipes. Which one?**
 It depends.
-*Parameter-level pipes* tend to be slimmer and cleaner. However, they often result in extra code added handlers - this can get messy and hard to maintain.
-*Handler-level pipes* require some more code, but provide some great benefits:
+_Parameter-level pipes_ tend to be slimmer and cleaner. However, they often result in extra code added handlers - this can get messy and hard to maintain.
+_Handler-level pipes_ require some more code, but provide some great benefits:
+
 - Such pipes do not require extra code at the parameter leve.
 - Easier to maintain and expand. If the shape of the data changes, it is easy to make the necessary changes within the pipe only.
 - Responsability if identifying the arguments to process is shifted to be one central file - the pipe file.
 - Promote usage of DTOs which is a very good practice.
 
+### ORM and TypeORM
 
+Objetc-Relational-Mapping is a technique that lets you query and manipulate data from a database, using an object-oriented paradigm.
+There are many ORM libraries that allow developers to communicate to the database using their preferred programming language - rather than sending plain queries directly.
+_Pros and cons of using an ORM library_
+PROS:
 
+- Writing the data model in one place - easier to maintain. Less repetition.
+- Lots of things done automatically - database handling, data types, relations, etc.
+- No need to write SQL syntax (easy to learn, hard to master). Using your natural way of coding.
+- Database abstraction - you can change the database type whenever you wish.
+- Leverages OOP, therefore things like inheritance are easy to achieve.
+  CONS:
+- You have to learn it, and ORM libraries are not always simple.
+- Performance is alright, but it's easy to neglect.
+- Makes it easy to forget (or never learn) what's happening behind the scenes, which can lead to a variety of maintainability issues.
+  _TypeORM_
+  Is an ORM library that can run in Node.js and be used with TypeScript (or JS).
+  Helps us define and manage entities, repositories, columns, relations, replications, indices, queries, logging, and so much more.
+  **Example**
+  Retrieving all task owned by "Ashley", and are of status "Done".
+  _TypeORM_
 
+```
+const task = await Task.find({ status: 'Done', user: 'Ashley' });
+```
+
+_Pure JavaScript_
+
+```
+let tasks;
+db.query('SELECT * FROM task WHERE status = "Done" AND user = "Ashley"', (err, result) => {
+  if(err) {
+    throw new Error(`Could not retrieve tasks!`);
+  }
+  tasks = result.rows;
+});
+```
 
 \* TODO:
-````

@@ -14,13 +14,14 @@ import { TasksService } from './tasks.service';
 import { Task, TaskStatus } from './tasks.model';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { TaskStatusValidationPipe } from './pipes/tasks-status-validation.pipe';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
   @Get()
-  getTask(@Query() filterDto: GetTasksFilterDto): Task[] {
+  getTask(@Query(ValidationPipe) filterDto: GetTasksFilterDto): Task[] {
     //if that param contains some filters provided in the query return the result of that
     if (Object.keys(filterDto).length) {
       return this.tasksService.getTaskWithFilters(filterDto);
@@ -44,7 +45,7 @@ export class TasksController {
   @Patch('/:id/status')
   updateTaskStatus(
     @Param('id') id: string,
-    @Body('status') status: TaskStatus,
+    @Body('status', TaskStatusValidationPipe) status: TaskStatus,
   ) {
     return this.tasksService.updateTaskStatus(id, status);
   }
