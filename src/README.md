@@ -247,4 +247,4 @@ db.query('SELECT * FROM task WHERE status = "Done" AND user = "Ashley"', (err, r
 });
 ```
 
-\* TODO:
+\* TODO: 2.15 revisar post y getId
