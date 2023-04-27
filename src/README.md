@@ -135,7 +135,80 @@ We can create a DTO for the create task operation and applied to the controller 
 - Refer to a specific item by ID
 - Specific the what has to be patched in the URL, in this case the status;
 - Provide the required parameters in the request body
-  `*PATCH:* http://locaholost:3000/tasks/25d6ee00-e4f0-11ed-ae23-056ba5723150/status`
+
+  `PATCH: http://locaholost:3000/tasks/25d6ee00-e4f0-11ed-ae23-056ba5723150/status`
   `{ "status": "IN_PROGRESS" }`
 
+### NestJS Pipes
+
+- Pipes operate on the argument to be processed by the route handler, just before the handler is called.
+- Pipes can perform _data transformation_ or _data validation_
+- Pipes can return data - either original or modified - which will be passed on to the route handler.
+- Pipes can throw exceptions. Exceptions thrown will be handled by NestJS and parsed into an error response.
+- Pipes can be asynchronous.
+
+### Default Pipes in NestJS
+
+- NestJS ships with useful pipes within the `@nestjs/common` module.
+  **Validation Pipe**
+  Validate the compatibility of an entire object against a class (goes well with DTOs). If any property cannot be mapped properly (for example, mismatching type) validation will fail.
+  A very common use case, therefore having a build-in validation pipe is extremely useful.
+  **ParseIntPipe**
+  By default, arguments are of type _string_. This pipe validates that an argument is a number. If successful, the argument is transformed into a _number_ and passed on to the handler. This is very useful when you expect a number and don't want to parse it manually everytime.
+  **Custom Pipe Implementation**
+  We can also implement our own custom pipes.
+- Pipes are classes annotated with the _@Injectable()_ decorator.
+- Pipes must implement the _PipesTransform_ generic interface. Therefore, every pipe must have a _transform()_ method. This method will called by NestJS to process the arguments.
+- The transform() method accept _two_ parameters:
+  _value_: the value of the processed argument.
+  _metadata_ (optional): an object containing metadata about the argument.
+- Whatever is returned from the _transform()_ method will be passed on to the route handler. Exceptions will be send back to the client.
+  **Pipes can be consumed in different ways.**
+  _Handler-level pipes_ are defined at the handler level, via the _UsePipes()_ decorator. Such pipe will process all parameters for the incoming request:
+
+```
+@Post()
+@UsePipes(SomePipe)
+createTask(
+  @Body('description') description
+) {
+  //...
+}
+```
+
+Or then there are parameters level types, which are defined at the parameter level, only that specific parameter for which the pipe has been specified will be process:
+
+````
+@Post()
+createTask(
+  @Body('description', SomePipe) description
+) {
+  //...
+}
+```
+And finally there are Global pipes, this are defined at the application level and to will be applied to any incoming request within the app.
+
+```
+async function bootstrap() {
+  const app = await NestFactory.create(ApplicationModule);
+  app.useGlobalPipes(SomePipe);
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+**Parameter-level VS Handler-level pipes. Which one?**
+It depends.
+*Parameter-level pipes* tend to be slimmer and cleaner. However, they often result in extra code added handlers - this can get messy and hard to maintain.
+*Handler-level pipes* require some more code, but provide some great benefits:
+- Such pipes do not require extra code at the parameter leve.
+- Easier to maintain and expand. If the shape of the data changes, it is easy to make the necessary changes within the pipe only.
+- Responsability if identifying the arguments to process is shifted to be one central file - the pipe file.
+- Promote usage of DTOs which is a very good practice.
+
+
+
+
+
 \* TODO:
+````
