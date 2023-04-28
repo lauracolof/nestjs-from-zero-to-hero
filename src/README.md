@@ -247,4 +247,6 @@ db.query('SELECT * FROM task WHERE status = "Done" AND user = "Ashley"', (err, r
 });
 ```
 
-\* TODO: 2.15 revisar post y getId
+**Persisting getting task**
+
+\* TODO: 2.39 revisar conexión a postgres
