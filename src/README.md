@@ -247,6 +247,14 @@ db.query('SELECT * FROM task WHERE status = "Done" AND user = "Ashley"', (err, r
 });
 ```
 
+### Config the DB connection
+
+Providing the data as an object
+
+- Create a new folder whit my configuration files in it (typeorm.config.ts)
+- Export this obj(TypeOrmConfig) with an Interface (TypeOrmModuleOptions) that's import from @nest/typeorm and we create a pool connection
+- Connection: type: 'postgres', host: 'localhost', port, username, password, DBname, entities: typeOrm use entities that translate to tables in DB and these are save in files. "[__dirname + '/../**/*.entity.ts']"
+
 **Persisting getting task**
 
 \* TODO: 2.39 revisar conexión a postgres

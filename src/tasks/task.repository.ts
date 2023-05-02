@@ -1,19 +1,28 @@
+import { Injectable } from '@nestjs/common/decorators';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
-@EntityRepository(Task)
+@Injectable()
 export class TaskRepository extends Repository<Task> {
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    const { title, description } = createTaskDto;
+  constructor(private dataSource: DataSource) {
+    super(Task, dataSource.createEntityManager());
+  }
 
-    const task = new Task();
-    task.title = title;
-    task.description = description;
-    task.status = TaskStatus.OPEN;
-    await task.save();
+  async createTask({ title, description }: CreateTaskDto): Promise<Task> {
+    const task = this.create({
+      title,
+      description,
+      status: TaskStatus.OPEN,
+    });
 
+    await this.save(task);
     return task;
   }
 }
+
+// @EntityRepository(Organization). // this is showing as deprecated
+// export class OrganizationsRepository extends Repository<Organization> {
+// ...
+// }
