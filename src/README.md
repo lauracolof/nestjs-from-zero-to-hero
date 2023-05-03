@@ -257,4 +257,4 @@ Providing the data as an object
 
 **Persisting getting task**
 
-\* TODO: 2.39 revisar conexión a postgres
+\* TODO: 3.17.00 hashing passwords

@@ -1,28 +1,41 @@
-import { Injectable } from '@nestjs/common/decorators';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
-import { DataSource, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 
-@Injectable()
+@EntityRepository(Task)
 export class TaskRepository extends Repository<Task> {
-  constructor(private dataSource: DataSource) {
-    super(Task, dataSource.createEntityManager());
+  async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+    const { status, search } = filterDto;
+    const query = this.createQueryBuilder('task');
+
+    if (status) {
+      //we use "and where", when we want that thay work together
+      //if only use "where" we overwrite any other where
+      query.andWhere('task.status = :status', { status });
+    }
+
+    if (search) {
+      //LIKE is very equal to = sign but it is allowing a partial match like %${IN SEQUELIZE}%
+      query.andWhere(
+        'task.title LIKE :search OR task.description LIKE :search',
+        { search: `%${search}%` },
+      );
+    }
+
+    const task = await query.getMany();
+    return task;
   }
 
-  async createTask({ title, description }: CreateTaskDto): Promise<Task> {
-    const task = this.create({
-      title,
-      description,
-      status: TaskStatus.OPEN,
-    });
+  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+    const { title, description } = createTaskDto;
+    const task = new Task();
+    task.title = title;
+    task.description = description;
+    task.status = TaskStatus.OPEN;
+    // await task.save();
 
-    await this.save(task);
     return task;
   }
 }
-
-// @EntityRepository(Organization). // this is showing as deprecated
-// export class OrganizationsRepository extends Repository<Organization> {
-// ...
-// }
