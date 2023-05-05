@@ -1,6 +1,4 @@
-# NOTES
-
-### Definition of module.
+# Modules.
 
 A Module is definned by annotating a class with the @Module decorator
 The decorator provides metadata that Nest uses to organize the application structure.
@@ -14,7 +12,9 @@ MODULE DECORATOR PROPERTIES:
   `nest g module nameOfModule`
   nest for nestjs cli, g for generate, module for schematic to create and nameOfModule that I want to created. Nest creates a new subfolder and edit the src/app.module.ts
 
-### NestJS Controllers
+---
+
+# Controllers.
 
 Definition: Controllers are defined by decoration a class the @Controller decorator.
 The decorator accepts a string, which is the path to be handled by the controller.
@@ -24,14 +24,16 @@ The decorator accepts a string, which is the path to be handled by the controlle
 - Contains handlers, which handle endpoints and request methods (GET, POST, DELETE, etc).
 - Can take advantage of dependency injection to consume providers within the same module.
 
-CREATE A CONTROLLER WITH NEST CLI
+## Create a controller with NestCLI
 
 `nest g controller tasks`
 
 (path of the controller ) --no-spec (no test unit for now)
 New file has been created and updated scr/task/task.module.ts
 
-### Handlers
+---
+
+# Handlers
 
 Definition: Handler are a simply methods within the controller class, decorated with decorators such as @Get, @Post, etc..
 
@@ -42,7 +44,9 @@ When a HTTP request incomming to our app:
 -> Handler handles the request: perform operations such as communication with a service. For example: retrieving an item from the database.
 -> Handle returns response value: Response can be of any type and even an exception. Nest will wrap the returned value as an HTTP response and return it to the client.
 
-### Providers
+---
+
+# Providers
 
 Can be injected into constructors if decorated as an @Injectable, dependency injection.
 Can be a plain value, a class, sync/async factory, etc.
@@ -54,21 +58,27 @@ Common concept within software develompment and are not exclusive NestJS, JavaSc
 Singleton when wrapped with @Injectable() and provided to a module. That means, the same instance will be shared across the app. acting as a single source of truth.
 The main source of business logic. For example, a service will be called from a controller to validate data, create an item in the database and return a response.
 
-### Dependency injection in NestJS
+---
+
+## Dependency injection in NestJS
 
 Any component within the NestJS ecosystem can injected a provider that is decorated with the @Injectable.
 We define the dependencies in the constructor of the class. NestJS will take care of the injection for us, and it will then be available as a class property.
 CREATE A SERVICE:
 nest g service tasks --no-spec
 
-### Difference between Interfaces & Models
+---
+
+## Difference between Interfaces & Models
 
 - Interfaces are a TS concept that simply enforces the shape of an object upon compilation, therefore after compilation interfaces are not preserved as a interfaces anymore.
 - Classes however already exist in JavaScript since ECMA6, therefore even both compilation our classes will be preserved. Classes are usefull when you want to create objects based on blueprint and add some self-contained functionality to them, using methods for example. Convert from Interface to class it's quite easy to do.
 
-### Data Transfer object (DTO)
+---
 
-`A data transfer objetc is an object that defines how the data will be sent over the network.`
+## Data Transfer object (DTO)
+
+`A data transfer object is an object that defines how the data will be sent over the network.`
 
 - Common concept in software develompment that is not specific to NestJS
 - Result in more bulletproof code, as it can be used as a TypeScript type.
@@ -87,7 +97,9 @@ nest g service tasks --no-spec
   However, the value they add makes it worthwhile to use them when applicable.
   Applying the DTO pattern as soon as possible will make it easy for you to mantein and refactor your code.
 
-### First way to create a task
+---
+
+## First way to create a task
 
 It's important to understand the problem that leads us to using DTOS, for example:
 
@@ -112,7 +124,7 @@ It's important to understand the problem that leads us to using DTOS, for exampl
   }
 ```
 
-### Second way to create a task
+## Second way to create a task
 
 We can create a DTO for the create task operation and applied to the controller and the service this will make it easier for us to maintain the shape of this data that is circulated across the app and introduce new changes to this sort of data.
 
@@ -123,7 +135,9 @@ We can create a DTO for the create task operation and applied to the controller 
   }
 ```
 
-### Update a task
+---
+
+## Update a task
 
 - Incoming PATCH HTTP request
 - The URL will contain the ID of the task to be deleted
@@ -139,7 +153,9 @@ We can create a DTO for the create task operation and applied to the controller 
   `PATCH: http://locaholost:3000/tasks/25d6ee00-e4f0-11ed-ae23-056ba5723150/status`
   `{ "status": "IN_PROGRESS" }`
 
-### NestJS Pipes
+---
+
+# NestJS Pipes
 
 - Pipes operate on the argument to be processed by the route handler, just before the handler is called.
 - Pipes can perform _data transformation_ or _data validation_
@@ -147,7 +163,7 @@ We can create a DTO for the create task operation and applied to the controller 
 - Pipes can throw exceptions. Exceptions thrown will be handled by NestJS and parsed into an error response.
 - Pipes can be asynchronous.
 
-### Default Pipes in NestJS
+## Default Pipes in NestJS
 
 - NestJS ships with useful pipes within the `@nestjs/common` module.
   **Validation Pipe**
@@ -198,21 +214,28 @@ async function bootstrap() {
 bootstrap();
 ```
 
-**Parameter-level VS Handler-level pipes. Which one?**
+### Parameter-level VS Handler-level pipes. Which one?
+
 It depends.
-_Parameter-level pipes_ tend to be slimmer and cleaner. However, they often result in extra code added handlers - this can get messy and hard to maintain.
-_Handler-level pipes_ require some more code, but provide some great benefits:
+**Parameter-level pipes** tend to be slimmer and cleaner. However, they often result in extra code added handlers - this can get messy and hard to maintain.
+**Handler-level pipes** require some more code, but provide some great benefits:
 
 - Such pipes do not require extra code at the parameter leve.
 - Easier to maintain and expand. If the shape of the data changes, it is easy to make the necessary changes within the pipe only.
 - Responsability if identifying the arguments to process is shifted to be one central file - the pipe file.
 - Promote usage of DTOs which is a very good practice.
 
-### ORM and TypeORM
+---
+
+# ORM and TypeORM
 
 Objetc-Relational-Mapping is a technique that lets you query and manipulate data from a database, using an object-oriented paradigm.
 There are many ORM libraries that allow developers to communicate to the database using their preferred programming language - rather than sending plain queries directly.
-_Pros and cons of using an ORM library_
+
+---
+
+### Pros and cons of using an ORM library
+
 PROS:
 
 - Writing the data model in one place - easier to maintain. Less repetition.
@@ -229,13 +252,14 @@ PROS:
   Helps us define and manage entities, repositories, columns, relations, replications, indices, queries, logging, and so much more.
   **Example**
   Retrieving all task owned by "Ashley", and are of status "Done".
-  _TypeORM_
+
+**TypeORM**
 
 ```
 const task = await Task.find({ status: 'Done', user: 'Ashley' });
 ```
 
-_Pure JavaScript_
+**Pure JavaScript**
 
 ```
 let tasks;
@@ -247,27 +271,96 @@ db.query('SELECT * FROM task WHERE status = "Done" AND user = "Ashley"', (err, r
 });
 ```
 
-### Config the DB connection
+---
+
+## Config the DB connection
 
 Providing the data as an object
 
 - Create a new folder whit my configuration files in it (typeorm.config.ts)
 - Export this obj(TypeOrmConfig) with an Interface (TypeOrmModuleOptions) that's import from @nest/typeorm and we create a pool connection
-- Connection: type: 'postgres', host: 'localhost', port, username, password, DBname, entities: typeOrm use entities that translate to tables in DB and these are save in files. "[__dirname + '/../**/*.entity.ts']"
+- Connection: type: 'postgres', host: 'localhost', port, username, password, DBname, entities: typeOrm use entities that translate to tables in DB and these are save in files.
 
-**Persisting getting task**
+`[__dirname + '/../**/*.entity.ts']`
 
-\* TODO: 3.17.00 hashing passwords
+---
 
-### Hashing password
+## Hashing password
 
 A salt is used as some additional input to a one-way hashing operation to safeguard the password in storage. Our code encrypts this password and then we get this hash generated, we stored this hash in the DB and it is associated with a user. We can't prevent that someday any one can get to our DB and get the hashed password, and with a program decrypt.
 So we can prevent this by using salts when we generate our passwords, so even if users choose for whatever reason to a common password, even though we have really strict passwords rules, there are still some common passwords, you'll still not be able to discover the password using websites like "Sha256() Encrypt & Decrypt".
-So it's going to prefix the password with some randon unique string, and then after we encrypt this password our hash result is going to be completely different, and if the attackers get access to this hash, they will try to decrypt but they will not be able to find out our password, cause even though our password is 123456, it's actually encrypted with the salt and _this salt is going to be unique per user_
+So it's going to prefix the password with some randon unique string, and then after we encrypt this password our hash result is going to be completely different, and if the attackers get access to this hash, they will try to decrypt but they will not be able to find out our password, cause even though our password is 123456, it's actually encrypted with the salt and **this salt is going to be unique per user**
 
 ### Feature validation password - Sign In
 
 In the sign in operation we want to do is receive the username in plain text password from request body and then check for a match in our DB, if we have a match that means the user should be signed in.
 _validatePassword_: is a custom method to validate a password for a individual user. We expect a string and we're gonna return a Promise of boolean. True/False whether the password is valid or not. We retreive the password from the request body, that is not necessarily the correct password, and then we're going to apply the same hash against the original user salt and then we're gonna compare the result hash with the actual user password hash and if it's a match that means the password input is correct and the user should be signed in so it'll return true.
 
-\*\*3.35.00 JWT
+---
+
+## JSON Web Tokens
+
+It's an open-source industry standard (RFC-7519).
+Is usable for Authorization or secure exchange of information between parties.
+It's use to verify that the sender is who it/he/she claims to be.
+It is signed by the issuer (the one issuing the token), using a secret or keypair using some cryptographic algorithms such as HMAC algorithm, RSA, or ECDSA.
+
+### JWT Structure
+
+`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJP`._eyJzdWIi0iIxMjM0NTY3ODkwIiwibmFtZSI6Ikpvag4gRG9lIiwiaXNTb2NpYQwiOnRydWV9_.**4pcPyMD09olPSyXnrXCjTwXyr4BsezdI1AVTmud2fU4**.
+
+`Header` contains metadata about the token (type, hashing algorithm, etc).
+
+_Payload_ it contains claims (statement about an entity - for example, a user and additional data).
+
+**Signature** is the result of the encoder header, the encoded payload, signed against a secret.
+
+Practical example:
+User "Jane Doe" signs into our application. We want to create a token which Jane can authorized for a while.
+We create a payload cointaining the username and role. We then sign the token with an expiry time of 1 hour. We use a secret for signing
+
+```
+{
+  "username": "Jane Doe",
+  "role": "admin",
+  "iat": 1516239020, -> means issued at the time in which the token is ussued
+  "exp": 1515242620 -> means issued at the time in which the token is expires
+}
+
+```
+
+the result of that JSON it's a token like the other one. Within that token there is a signature, and the signature is the result of the header, payload, processed against a secret that only we know after a cryptographic hash.
+
+---
+
+### Authorizing a real Jane Doe
+
+Jane Doe send a request to API, she wants to delete a task. In the request headers, we can find a JWT token.
+To validate her token, we take the headers and payload, and re-generated the signature using our secret.
+We then compare the result signature with the signature in her token.
+If it's a match, so the signature is valid and therefore Jane Doe is who she claims to be. And we can take the claims in that signature is valid.
+
+### Reject a fake Jane Doe.
+
+Dane Joe send a request to our API, and she wants to access some information that should be only available to admins. In reality, she is a normal user with no admin rights. But DJ is smart, she managed to grab the token and modified the payload:
+
+```
+{
+  "username": "Dane Joe",
+  "role": "admin",
+  "iat": 1516239020,
+  "exp": 1516242620
+
+}
+```
+
+DJ is not goind to beat us. We will take the header and payload from this fake token, and generate a signature against our secret.
+We will then compare the result signature to the signature provided in her token. Since JD does not know our secret - there is no way she could fake signature as well. We compare the signature that she's provided with a signature that we generated based on the real secret and what we get is a no match.
+
+### More about JSON Web Tokens.
+
+JWT can be decoded by anyone. They should not contain sensitive information such as passwords.
+It's useful for front-end applications to use these tokens to toggle features conditionally. For example, if a user is an administrator, we could show or hide a certain button based on the claims in the token.
+Finally, JWT should ideally be short-lived.
+
+\*\*3.48.00
