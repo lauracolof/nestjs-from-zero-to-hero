@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BaseEntity,
   Column,
@@ -19,6 +20,7 @@ export class User extends BaseEntity {
   password: string;
   @Column()
   salt: string;
+  tasks: any;
   //custom method to validate the password
   async validatePassword(password: string): Promise<boolean> {
     //input password with the correct salt to this user

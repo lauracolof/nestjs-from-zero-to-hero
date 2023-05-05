@@ -1,8 +1,9 @@
-# Modules.
+# `Modules.`
 
-A Module is definned by annotating a class with the @Module decorator
+A Module is definned by annotating a class with the `@Module` decorator
 The decorator provides metadata that Nest uses to organize the application structure.
-MODULE DECORATOR PROPERTIES:
+
+Module decorator properties:
 
 - providers: Array of providers to be available within the module via dependency injection.
 - controllers: Array of controllers to be instantiated with the module
@@ -14,9 +15,9 @@ MODULE DECORATOR PROPERTIES:
 
 ---
 
-# Controllers.
+# `Controllers`
 
-Definition: Controllers are defined by decoration a class the @Controller decorator.
+Definition: Controllers are defined by decoration a class the `@Controller` decorator.
 The decorator accepts a string, which is the path to be handled by the controller.
 
 - Controllers are the responsibles for handling incoming requests and returning responses to the client.
@@ -33,20 +34,21 @@ New file has been created and updated scr/task/task.module.ts
 
 ---
 
-# Handlers
+# `Handlers`
 
 Definition: Handler are a simply methods within the controller class, decorated with decorators such as @Get, @Post, etc..
 
 FLOW:
 When a HTTP request incomming to our app:
--> The request are routed to Controller
--> the handler is called with arguments: NestJS parse the relevant request data and it will be available in the handler.
--> Handler handles the request: perform operations such as communication with a service. For example: retrieving an item from the database.
--> Handle returns response value: Response can be of any type and even an exception. Nest will wrap the returned value as an HTTP response and return it to the client.
+
+- The request are routed to Controller
+- the handler is called with arguments: NestJS parse the relevant request data and it will be available in the handler.
+- Handler handles the request: perform operations such as communication with a service. For example: retrieving an item from the database.
+- Handle returns response value: Response can be of any type and even an exception. Nest will wrap the returned value as an HTTP response and return it to the client.
 
 ---
 
-# Providers
+# `Providers`
 
 Can be injected into constructors if decorated as an @Injectable, dependency injection.
 Can be a plain value, a class, sync/async factory, etc.
@@ -60,7 +62,7 @@ The main source of business logic. For example, a service will be called from a 
 
 ---
 
-## Dependency injection in NestJS
+## `Dependency injection in NestJS`
 
 Any component within the NestJS ecosystem can injected a provider that is decorated with the @Injectable.
 We define the dependencies in the constructor of the class. NestJS will take care of the injection for us, and it will then be available as a class property.
@@ -69,16 +71,16 @@ nest g service tasks --no-spec
 
 ---
 
-## Difference between Interfaces & Models
+## `Difference between Interfaces & Models`
 
 - Interfaces are a TS concept that simply enforces the shape of an object upon compilation, therefore after compilation interfaces are not preserved as a interfaces anymore.
 - Classes however already exist in JavaScript since ECMA6, therefore even both compilation our classes will be preserved. Classes are usefull when you want to create objects based on blueprint and add some self-contained functionality to them, using methods for example. Convert from Interface to class it's quite easy to do.
 
 ---
 
-## Data Transfer object (DTO)
+## `Data Transfer object (DTO)`
 
-`A data transfer object is an object that defines how the data will be sent over the network.`
+### A data transfer object is an object that defines how the data will be sent over the network.\_
 
 - Common concept in software develompment that is not specific to NestJS
 - Result in more bulletproof code, as it can be used as a TypeScript type.
@@ -99,7 +101,7 @@ nest g service tasks --no-spec
 
 ---
 
-## First way to create a task
+## `First way to create a task`
 
 It's important to understand the problem that leads us to using DTOS, for example:
 
@@ -124,7 +126,7 @@ It's important to understand the problem that leads us to using DTOS, for exampl
   }
 ```
 
-## Second way to create a task
+## `Second way to create a task`
 
 We can create a DTO for the create task operation and applied to the controller and the service this will make it easier for us to maintain the shape of this data that is circulated across the app and introduce new changes to this sort of data.
 
@@ -137,7 +139,7 @@ We can create a DTO for the create task operation and applied to the controller 
 
 ---
 
-## Update a task
+## `Update a task`
 
 - Incoming PATCH HTTP request
 - The URL will contain the ID of the task to be deleted
@@ -155,7 +157,7 @@ We can create a DTO for the create task operation and applied to the controller 
 
 ---
 
-# NestJS Pipes
+# `NestJS Pipes`
 
 - Pipes operate on the argument to be processed by the route handler, just before the handler is called.
 - Pipes can perform _data transformation_ or _data validation_
@@ -163,7 +165,7 @@ We can create a DTO for the create task operation and applied to the controller 
 - Pipes can throw exceptions. Exceptions thrown will be handled by NestJS and parsed into an error response.
 - Pipes can be asynchronous.
 
-## Default Pipes in NestJS
+## `Default Pipes in NestJS`
 
 - NestJS ships with useful pipes within the `@nestjs/common` module.
   **Validation Pipe**
@@ -214,7 +216,7 @@ async function bootstrap() {
 bootstrap();
 ```
 
-### Parameter-level VS Handler-level pipes. Which one?
+### `Parameter-level VS Handler-level pipes. Which one?`
 
 It depends.
 **Parameter-level pipes** tend to be slimmer and cleaner. However, they often result in extra code added handlers - this can get messy and hard to maintain.
@@ -227,14 +229,14 @@ It depends.
 
 ---
 
-# ORM and TypeORM
+# `ORM and TypeORM`
 
 Objetc-Relational-Mapping is a technique that lets you query and manipulate data from a database, using an object-oriented paradigm.
 There are many ORM libraries that allow developers to communicate to the database using their preferred programming language - rather than sending plain queries directly.
 
 ---
 
-### Pros and cons of using an ORM library
+### `Pros and cons of using an ORM library`
 
 PROS:
 
@@ -273,7 +275,7 @@ db.query('SELECT * FROM task WHERE status = "Done" AND user = "Ashley"', (err, r
 
 ---
 
-## Config the DB connection
+## `Config the DB connection`
 
 Providing the data as an object
 
@@ -285,27 +287,27 @@ Providing the data as an object
 
 ---
 
-## Hashing password
+## `Hashing password`
 
 A salt is used as some additional input to a one-way hashing operation to safeguard the password in storage. Our code encrypts this password and then we get this hash generated, we stored this hash in the DB and it is associated with a user. We can't prevent that someday any one can get to our DB and get the hashed password, and with a program decrypt.
 So we can prevent this by using salts when we generate our passwords, so even if users choose for whatever reason to a common password, even though we have really strict passwords rules, there are still some common passwords, you'll still not be able to discover the password using websites like "Sha256() Encrypt & Decrypt".
 So it's going to prefix the password with some randon unique string, and then after we encrypt this password our hash result is going to be completely different, and if the attackers get access to this hash, they will try to decrypt but they will not be able to find out our password, cause even though our password is 123456, it's actually encrypted with the salt and **this salt is going to be unique per user**
 
-### Feature validation password - Sign In
+### `Feature validation password - Sign In`
 
 In the sign in operation we want to do is receive the username in plain text password from request body and then check for a match in our DB, if we have a match that means the user should be signed in.
 _validatePassword_: is a custom method to validate a password for a individual user. We expect a string and we're gonna return a Promise of boolean. True/False whether the password is valid or not. We retreive the password from the request body, that is not necessarily the correct password, and then we're going to apply the same hash against the original user salt and then we're gonna compare the result hash with the actual user password hash and if it's a match that means the password input is correct and the user should be signed in so it'll return true.
 
 ---
 
-## JSON Web Tokens
+## `JSON Web Tokens`
 
 It's an open-source industry standard (RFC-7519).
 Is usable for Authorization or secure exchange of information between parties.
 It's use to verify that the sender is who it/he/she claims to be.
 It is signed by the issuer (the one issuing the token), using a secret or keypair using some cryptographic algorithms such as HMAC algorithm, RSA, or ECDSA.
 
-### JWT Structure
+### `JWT Structure`
 
 `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJP`._eyJzdWIi0iIxMjM0NTY3ODkwIiwibmFtZSI6Ikpvag4gRG9lIiwiaXNTb2NpYQwiOnRydWV9_.**4pcPyMD09olPSyXnrXCjTwXyr4BsezdI1AVTmud2fU4**.
 
@@ -333,14 +335,14 @@ the result of that JSON it's a token like the other one. Within that token there
 
 ---
 
-### Authorizing a real Jane Doe
+### `Authorizing a real Jane Doe`
 
 Jane Doe send a request to API, she wants to delete a task. In the request headers, we can find a JWT token.
 To validate her token, we take the headers and payload, and re-generated the signature using our secret.
 We then compare the result signature with the signature in her token.
 If it's a match, so the signature is valid and therefore Jane Doe is who she claims to be. And we can take the claims in that signature is valid.
 
-### Reject a fake Jane Doe.
+### `Reject a fake Jane Doe`
 
 Dane Joe send a request to our API, and she wants to access some information that should be only available to admins. In reality, she is a normal user with no admin rights. But DJ is smart, she managed to grab the token and modified the payload:
 
@@ -357,10 +359,76 @@ Dane Joe send a request to our API, and she wants to access some information tha
 DJ is not goind to beat us. We will take the header and payload from this fake token, and generate a signature against our secret.
 We will then compare the result signature to the signature provided in her token. Since JD does not know our secret - there is no way she could fake signature as well. We compare the signature that she's provided with a signature that we generated based on the real secret and what we get is a no match.
 
-### More about JSON Web Tokens.
+---
+
+### `More about JSON Web Tokens.`
 
 JWT can be decoded by anyone. They should not contain sensitive information such as passwords.
 It's useful for front-end applications to use these tokens to toggle features conditionally. For example, if a user is an administrator, we could show or hide a certain button based on the claims in the token.
 Finally, JWT should ideally be short-lived.
 
-\*\*3.48.00
+---
+
+### `Define the relationship between task and users.`
+
+Ideally when we create a task we want to associate that task with the user who's created it, when we delete a task we only want to allow the leading of tasks that the user owns, same goes for updating the status, etc. When we get old tasks we only want to return tasks that belong to that user.
+**Authorization creating a task for user**
+
+We want to request to create a task we want to identify the user based on the token, and then to associate the user with the task that we're just creating. In the task controller, we create a task handler that define an extra parameter.
+
+**Authorization getting a task for user**
+Rather than simple return all tasks where you only want to return those tasks owned by that user who's sending a req.
+
+---
+
+## `Login`
+
+We have so many different operations, some are very important, some are less important, some are destructive for users and some are not. If something goes wrong, we could use logging to help up be aware of that.
+We could also provide some useful information that will help us find the problem and the cause for what went wrong.
+Logs can be useful for us, as developers but also for people who operate and use our software.
+
+There are different types of logs, and these types can be useful for different situations and sometimes even different people. The first type would be:
+
+**`General logs`**: general purpose logging of important information, for ex: when we start our app we could log app started on PORT: 3000.
+
+**`Warning logs`**: Unhandled issues that is NOT fatal or destructive, for ex: when we manage to save a tasking DB but only after two attempts. This is what we want to look into, but it's not destructive for the user or app.
+
+**`Error`**: This are unhandled issues that are fatal or destructive, for ex: when we failed so save a task in the DB, even though all the validation passed and the task is good to be saved.
+
+**`Debug`**: Useful information that can help us debug the logic in case of an error/warning. Intended for developers. For ex: we could log the state of the app, during some operation.
+
+**`Verbose log`**: Information provided insights about the behavior of the app. Intended for operators (for ex: support). Usually "too much information". For ex: for the averrage users who looks at the logs
+
+You could define multiple logs level for different environments.
+
+`Developer mode`: you could define that you show all kind of logs.
+
+`Staging mode`: you should everything but debug and verbose.
+
+`Production mode`: you only show log and error.
+
+## `Applying logging in our app`
+
+NestJS ships with a logger which is a part of the `@nestjs/common` module. And we're gonna applying the default logging app. We can define a custom logger of our own. We are going to cover differents kinds of logs.
+
+---
+
+## `Configuration`
+
+- Is a central way of defining values that are loaded _upon starting the app_ this values should not be changed during runtime, they are static values.
+- Configuration per environment - development, staging, production, etc..
+- Configuration can be defined in the code base. Useful if you work with multuple developers via version control. Your configuration _should_ always work with the code it ships with.
+- The configuracion can be defined in many ways (JSON, YAML, XML, Environment Variables, etc), using custom solutions or open-source libreries.
+
+---
+
+## `Codebase VS Environment Variables`
+
+You could define configuration in your codebase. For example, in a _config_ folder. You could also support configuring values via _environment variables_ (which are provided when running the app).
+_Example_:
+Non-sensitive information such as the port to run the app on, will be defined in the codebase.
+Sensitive information such as database username and password for production mode, will be provided via environment variables upon running the app.
+By default the environment variables are undefined, and then config, takes the development config by default.
+There are some information that we're never going to provide with file based configuration, we're gonna provida with environment variables, and not just any env. variables, we're gonna use RDS env. variables. RDS stands for relational databases services (AWS).
+
+<!-4.50 deploy with aws y conectar al front -->

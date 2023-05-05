@@ -1,8 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+} from 'typeorm';
 import { TaskStatus } from './task-status.enum';
+import { User } from '../auth/user.entity';
 
 @Entity()
-export class Task {
+export class Task extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -14,4 +22,10 @@ export class Task {
 
   @Column()
   status: TaskStatus;
+
+  @ManyToOne((type) => User, (user) => user.tasks, { eager: false })
+  user: User;
+
+  @Column()
+  userId: number;
 }
