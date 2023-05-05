@@ -258,3 +258,16 @@ Providing the data as an object
 **Persisting getting task**
 
 \* TODO: 3.17.00 hashing passwords
+
+### Hashing password
+
+A salt is used as some additional input to a one-way hashing operation to safeguard the password in storage. Our code encrypts this password and then we get this hash generated, we stored this hash in the DB and it is associated with a user. We can't prevent that someday any one can get to our DB and get the hashed password, and with a program decrypt.
+So we can prevent this by using salts when we generate our passwords, so even if users choose for whatever reason to a common password, even though we have really strict passwords rules, there are still some common passwords, you'll still not be able to discover the password using websites like "Sha256() Encrypt & Decrypt".
+So it's going to prefix the password with some randon unique string, and then after we encrypt this password our hash result is going to be completely different, and if the attackers get access to this hash, they will try to decrypt but they will not be able to find out our password, cause even though our password is 123456, it's actually encrypted with the salt and _this salt is going to be unique per user_
+
+### Feature validation password - Sign In
+
+In the sign in operation we want to do is receive the username in plain text password from request body and then check for a match in our DB, if we have a match that means the user should be signed in.
+_validatePassword_: is a custom method to validate a password for a individual user. We expect a string and we're gonna return a Promise of boolean. True/False whether the password is valid or not. We retreive the password from the request body, that is not necessarily the correct password, and then we're going to apply the same hash against the original user salt and then we're gonna compare the result hash with the actual user password hash and if it's a match that means the password input is correct and the user should be signed in so it'll return true.
+
+\*\*3.35.00 JWT
