@@ -13,15 +13,15 @@ import {
   UseGuards,
   Logger,
 } from '@nestjs/common';
-import { TasksService } from './tasks.service';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { TaskStatusValidationPipe } from './pipes/tasks-status-validation.pipe';
-import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
-import { Task } from './task.entity';
-import { TaskStatus } from './task-status.enum';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/auth/user.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
+import { Task } from './task.entity';
+import { TasksService } from './tasks.service';
+import { Logger } from '@nestjs/common';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
@@ -32,7 +32,7 @@ export class TasksController {
 
   @Get()
   getTasks(
-    @Query(ValidationPipe) filterDto: GetTasksFilterDto,
+    @Query() filterDto: GetTasksFilterDto,
     @GetUser() user: User,
   ): Promise<Task[]> {
     this.logger.verbose(
@@ -49,7 +49,6 @@ export class TasksController {
   }
 
   @Post()
-  @UsePipes(ValidationPipe)
   createTask(
     @Body() createTaskDto: CreateTaskDto,
     @GetUser() user: User,
@@ -70,9 +69,10 @@ export class TasksController {
   @Patch('/:id/status')
   updateTaskStatus(
     @Param('id') id: string,
-    @Body('status', TaskStatusValidationPipe) status: TaskStatus,
+    @Body() updateTaskStatus: UpdateTaskStatusDto,
     @GetUser() user: User,
   ): Promise<Task> {
+    const { status } = updateTaskStatus;
     return this.tasksService.updateTaskStatus(id, status, user);
   }
 }
